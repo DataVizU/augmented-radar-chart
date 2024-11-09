@@ -1,0 +1,22 @@
+# Build outputs
+dist/
+build/
+lib/
+
+# Dependencies
+node_modules/
+
+# Cache and logs
+.cache/
+coverage/
+*.log
+
+# Config files
+*.config.js
+*.config.ts
+
+# Type definitions
+*.d.ts
+
+# Other
+.DS_Store 
