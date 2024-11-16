@@ -1,15 +1,14 @@
-type NonZeroNumber = number extends 0 ? never : number;
-type FixedLengthArray<N extends NonZeroNumber> = number[] & { length: N };
+type NonZeroNumber = Exclude<number, 0>;
+type FixedLengthArray<T, N extends NonZeroNumber> = T[] & { length: N };
 
-export type AugmentedRadarChartData<N extends number> = FixedLengthArray<N>[];
+export type AugmentedRadarChartSVGData<
+  N extends NonZeroNumber = Exclude<number, 0>,
+  K extends string = string,
+> = FixedLengthArray<Record<K, number>, N>;
 
-export interface AugmentedRadarChartOptions {
-  /**
-   *
-   */
-  size?: number;
-  /**
-   *
-   */
-  colors?: string[];
+export interface AugmentedRadarChartSVGOptions {
+  container: HTMLElement;
+  size: number;
+  radarChartOptions: {};
+  horizonChartOptions: {};
 }
