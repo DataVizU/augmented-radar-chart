@@ -69,7 +69,7 @@ export interface AugmentedRadarChartOptions {
       color: string | Array<string>;
     };
 
-    axis?: {
+    axis: {
       // number of ticks in each layer
       lineCount: number;
       lineColor: string;
