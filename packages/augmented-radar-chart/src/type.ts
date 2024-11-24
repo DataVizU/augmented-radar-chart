@@ -92,7 +92,7 @@ export interface AugmentedRadarChartOptions {
 
 // TODO: specific options
 export interface AugmentedRadarChartSVGOptions extends AugmentedRadarChartOptions {
-  behavior?: Array<(event: MouseEvent, data: unknown) => void>; // 点击事件回调
+  behavior?: Array<(event: MouseEvent, data: unknown) => void>;
 }
 
 export interface AugmentedRadarChartCanvasOptions extends AugmentedRadarChartOptions {
