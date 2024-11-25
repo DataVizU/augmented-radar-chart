@@ -20,13 +20,12 @@ export interface AugmentedRadarChartOptions {
     };
     label: {
       // Text color for axis labels
-      color?: string;
-      offset?: number;
+      color: string;
     };
     line: {
-      color?: string;
-      width?: number;
-      type?: string;
+      color: string;
+      width: number;
+      type: string;
     };
   };
 }
