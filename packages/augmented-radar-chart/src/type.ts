@@ -14,10 +14,13 @@ export interface AugmentedRadarChartOptions {
 
   // Styling options for the radar chart
   styles: {
+    area: {
+      layerCount: number;
+      colors: string | Array<string>;
+    };
     label: {
       // Text color for axis labels
       color?: string;
-      // Distance offset for labels from axis ends
       offset?: number;
     };
     line: {
@@ -25,13 +28,9 @@ export interface AugmentedRadarChartOptions {
       width?: number;
       type?: string;
     };
-    area: {
-      layerCount: number;
-      colors: string | Array<string>;
-    };
   };
 }
 
-export interface AugmentedRadarChartSVGOptions extends AugmentedRadarChartOptions {}
+// export interface AugmentedRadarChartSVGOptions extends AugmentedRadarChartOptions {}
 
-export interface AugmentedRadarChartCanvasOptions extends AugmentedRadarChartOptions {}
+// export interface AugmentedRadarChartCanvasOptions extends AugmentedRadarChartOptions {}
