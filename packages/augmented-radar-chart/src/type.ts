@@ -31,6 +31,6 @@ export interface AugmentedRadarChartOptions {
   };
 }
 
-// export interface AugmentedRadarChartSVGOptions extends AugmentedRadarChartOptions {}
+export interface AugmentedRadarChartSVGOptions extends AugmentedRadarChartOptions {}
 
-// export interface AugmentedRadarChartCanvasOptions extends AugmentedRadarChartOptions {}
+export interface AugmentedRadarChartCanvasOptions extends AugmentedRadarChartOptions {}
