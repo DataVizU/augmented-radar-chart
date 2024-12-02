@@ -15,7 +15,7 @@ export interface AugmentedRadarChartOptions {
   // Styling options for the radar chart
   styles: {
     area: {
-      layerCount: number;
+      bands: number;
       colors: string | Array<string>;
     };
     label: {

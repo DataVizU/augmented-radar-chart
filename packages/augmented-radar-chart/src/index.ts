@@ -1,12 +1,27 @@
-import { AugmentedRadarChartData, AugmentedRadarChartSVGOptions } from './type';
+import { AugmentedRadarChartData, AugmentedRadarChartOptions } from './type';
 
-export function helloWorld(): void {
-  console.log('Hello World!');
+export class AugmentedRadarChart {
+  public data: AugmentedRadarChartData;
+  public options: AugmentedRadarChartOptions;
+
+  constructor(data: AugmentedRadarChartData, options: AugmentedRadarChartOptions) {
+    /**
+     * @description - validate params and (if validated) continue calculate & render
+     * @param data
+     * @param options
+     */
+    this.data = data;
+    this.options = options;
+  }
+
+  private validate() {}
+
+  private calculate() {}
+
+  public render() {}
 }
 
-export function drawSVG(
-  data: AugmentedRadarChartData,
-  option: AugmentedRadarChartSVGOptions,
-): void {
-  console.log({ data, option });
-}
+/*
+const chart = AugmentedRadarChart(data, options)
+chart.render()
+ */
