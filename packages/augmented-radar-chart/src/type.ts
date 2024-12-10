@@ -9,13 +9,20 @@ export type AugmentedRadarChartData<
 
  */
 
-export type AugmentedRadarChartData = Array<Record<string, number>>;
+export type AugmentedRadarChartData = Record<
+  string,
+  Array<{
+    point: number;
+    value: number;
+  }>
+>;
 
 export interface AugmentedRadarChartConfig {
   // DOM element to render the chart
   container: HTMLElement;
   // The size of the chart
   size: number;
+  bins: Record<string, { start: number; end: number }>;
 
   // Styling options for the radar chart
   styles: {
