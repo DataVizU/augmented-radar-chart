@@ -1,6 +1,6 @@
 import { AugmentedRadarChartConfig } from '../type';
 
-export function preprocessConfig(config: AugmentedRadarChartConfig): AugmentedRadarChartConfig {
+export function validateConfig(config: AugmentedRadarChartConfig): AugmentedRadarChartConfig {
   /**
    * validate options
    * @param {AugmentedRadarChartConfig} data - config

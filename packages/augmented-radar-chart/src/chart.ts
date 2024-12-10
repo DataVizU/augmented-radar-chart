@@ -1,71 +1,30 @@
 import { AugmentedRadarChartConfig, AugmentedRadarChartData } from './type';
-import { preprocessConfig, preprocessData } from './prepocessing';
+import { validateConfig, validateData } from './validation';
 import { calculateAverage, calculateDistribution } from './calculation';
 
 abstract class AugmentedRadarChart {
-  protected data: AugmentedRadarChartData;
-  protected config: AugmentedRadarChartConfig;
-  protected average: Record<string, number>;
-  protected distribution: Record<
-    string,
-    {
-      max: number;
-      min: number;
-    }
-  >;
+  private data: AugmentedRadarChartData | undefined;
+  private config: AugmentedRadarChartConfig | undefined;
+  private average: Record<string, number> | undefined;
+  private distribution: AugmentedRadarChartData | undefined;
 
   constructor(data: AugmentedRadarChartData, config: AugmentedRadarChartConfig) {
-    this.data = preprocessData(data);
-    this.config = preprocessConfig(config);
-    this.average = calculateAverage(data);
-    this.distribution = calculateDistribution(data);
+    if (validateConfig(config) && validateData(data)) {
+      this.data = data;
+      this.config = config;
+      this.average = calculateAverage(data);
+      this.distribution = calculateDistribution(data, config.bins);
+    } else {
+      throw new Error(`Invalid data or config`);
+    }
   }
-
-  protected abstract render(
-    average: Record<string, number>,
-    distribution: Record<
-      string,
-      {
-        max: number;
-        min: number;
-      }
-    >,
-    config: AugmentedRadarChartConfig,
-  ): void;
-
-  public draw() {
-    this.render(this.average, this.distribution, this.config);
-  }
+  public draw(): void {}
 }
 
 export class AugmentedRadarChartSVG extends AugmentedRadarChart {
-  protected render(
-    average: Record<string, number>,
-    distribution: Record<
-      string,
-      {
-        max: number;
-        min: number;
-      }
-    >,
-    config: AugmentedRadarChartConfig,
-  ): void {
-    console.log({ average, distribution, config });
-  }
+  public draw(): void {}
 }
 
 export class AugmentedRadarChartCanvas extends AugmentedRadarChart {
-  protected render(
-    average: Record<string, number>,
-    distribution: Record<
-      string,
-      {
-        max: number;
-        min: number;
-      }
-    >,
-    config: AugmentedRadarChartConfig,
-  ): void {
-    console.log({ average, distribution, config });
-  }
+  public draw(): void {}
 }

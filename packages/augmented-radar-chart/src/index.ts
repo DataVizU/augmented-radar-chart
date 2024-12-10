@@ -1,8 +1,8 @@
-import { AugmentedRadarChartConfig } from './type';
+import { AugmentedRadarChartConfig, AugmentedRadarChartData } from './type';
 import { AugmentedRadarChartCanvas, AugmentedRadarChartSVG } from './chart';
 
 export function draw(
-  data: Array<Record<string, number>>,
+  data: AugmentedRadarChartData,
   options: AugmentedRadarChartConfig,
   renderer: 'SVG' | 'Canvas',
 ): void {

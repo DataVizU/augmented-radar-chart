@@ -2,12 +2,15 @@ import { AugmentedRadarChartData } from '../type';
 
 export function calculateDistribution(
   data: AugmentedRadarChartData,
-): Record<string, { max: number; min: number }> {
+  config: Record<string, { start: number; end: number }>,
+): AugmentedRadarChartData {
   /**
+   * @deprecated
    * calculate distribution of each dimension
-   * @param {AugmentedRadarChartData} data
-   * @return {Record<string, { max: number; min: number }>} distribution of each dimension
+   * @param {AugmentedRadarChartData} data - data
+   * @param {Record<string, { start: number; end: number }>} config
+   * @return {AugmentedRadarChartData} - distribution of each dimension
    */
-  console.log(data);
-  return { '': { max: 1, min: 0 } };
+  console.log({ data, config });
+  return {};
 }
