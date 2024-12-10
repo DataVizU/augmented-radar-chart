@@ -6,7 +6,7 @@ abstract class AugmentedRadarChart {
   private data: AugmentedRadarChartData | undefined;
   private config: AugmentedRadarChartConfig | undefined;
   private average: Record<string, number> | undefined;
-  private distribution: Record<string, Record<number, number>> | undefined;
+  private distribution: AugmentedRadarChartData | undefined;
 
   constructor(data: AugmentedRadarChartData, config: AugmentedRadarChartConfig) {
     if (validateConfig(config) && validateData(data)) {
@@ -18,34 +18,13 @@ abstract class AugmentedRadarChart {
       throw new Error(`Invalid data or config`);
     }
   }
-
-  protected abstract render(
-    average: Record<string, number> | undefined,
-    distribution: Record<string, Record<number, number>> | undefined,
-    config: AugmentedRadarChartConfig | undefined,
-  ): void;
-
-  public draw() {
-    this.render(this.average, this.distribution, this.config);
-  }
+  public draw(): void {}
 }
 
 export class AugmentedRadarChartSVG extends AugmentedRadarChart {
-  protected render(
-    average: Record<string, number> | undefined,
-    distribution: Record<string, Record<number, number>> | undefined,
-    config: AugmentedRadarChartConfig | undefined,
-  ): void {
-    console.log({ average, distribution, config });
-  }
+  public draw(): void {}
 }
 
 export class AugmentedRadarChartCanvas extends AugmentedRadarChart {
-  protected render(
-    average: Record<string, number> | undefined,
-    distribution: Record<string, Record<number, number>> | undefined,
-    config: AugmentedRadarChartConfig | undefined,
-  ): void {
-    console.log({ average, distribution, config });
-  }
+  public draw(): void {}
 }
