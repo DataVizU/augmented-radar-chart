@@ -1,10 +1,13 @@
 import { AugmentedRadarChartData } from '../type';
 
-export function calculateDistribution(data: AugmentedRadarChartData): void {
+export function calculateDistribution(
+  data: AugmentedRadarChartData,
+): Record<string, { max: number; min: number }> {
   /**
-   * @description - calculate distributions of each dimension
-   * @param data
-   * TODO: @return
+   * calculate distribution of each dimension
+   * @param {AugmentedRadarChartData} data
+   * @return {Record<string, { max: number; min: number }>} distribution of each dimension
    */
   console.log(data);
+  return { '': { max: 1, min: 0 } };
 }

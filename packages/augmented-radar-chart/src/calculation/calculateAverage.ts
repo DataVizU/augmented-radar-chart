@@ -1,10 +1,10 @@
 import { AugmentedRadarChartData } from '../type';
 
-export function calculateAverage(data: AugmentedRadarChartData): void {
+export function calculateAverage(data: AugmentedRadarChartData) {
   /**
-   * @description - calculate averages of each dimension
-   * @param data
-   * TODO: @return
+   * calculate averages of each dimension
+   * @param {AugmentedRadarChartData} data
+   * @return {Record<string, number>} averages of each dimension
    */
-  console.log(data);
+  return data[0];
 }

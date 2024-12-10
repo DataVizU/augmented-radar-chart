@@ -1,12 +1,17 @@
 type NonZeroNumber = Exclude<number, 0>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type FixedLengthArray<T, N extends NonZeroNumber> = T[] & { length: N };
-
+/*
 export type AugmentedRadarChartData<
   N extends NonZeroNumber = Exclude<number, 0>,
   K extends string = string,
 > = FixedLengthArray<Record<K, number>, N>;
 
-export interface AugmentedRadarChartOptions {
+ */
+
+export type AugmentedRadarChartData = Array<Record<string, number>>;
+
+export interface AugmentedRadarChartConfig {
   // DOM element to render the chart
   container: HTMLElement;
   // The size of the chart
@@ -25,11 +30,6 @@ export interface AugmentedRadarChartOptions {
     line: {
       color: string;
       width: number;
-      type: string;
     };
   };
 }
-
-export interface AugmentedRadarChartSVGOptions extends AugmentedRadarChartOptions {}
-
-export interface AugmentedRadarChartCanvasOptions extends AugmentedRadarChartOptions {}

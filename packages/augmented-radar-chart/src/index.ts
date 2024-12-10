@@ -1,27 +1,16 @@
-import { AugmentedRadarChartData, AugmentedRadarChartOptions } from './type';
+import { AugmentedRadarChartConfig } from './type';
+import { AugmentedRadarChartCanvas, AugmentedRadarChartSVG } from './chart';
 
-export class AugmentedRadarChart {
-  public data: AugmentedRadarChartData;
-  public options: AugmentedRadarChartOptions;
-
-  constructor(data: AugmentedRadarChartData, options: AugmentedRadarChartOptions) {
-    /**
-     * @description - validate params and (if validated) continue calculate & render
-     * @param data
-     * @param options
-     */
-    this.data = data;
-    this.options = options;
+export function draw(
+  data: Array<Record<string, number>>,
+  options: AugmentedRadarChartConfig,
+  renderer: 'SVG' | 'Canvas',
+): void {
+  let chart;
+  if (renderer === 'SVG') {
+    chart = new AugmentedRadarChartSVG(data, options);
+  } else {
+    chart = new AugmentedRadarChartCanvas(data, options);
   }
-
-  private validate() {}
-
-  private calculate() {}
-
-  public render() {}
+  chart.draw();
 }
-
-/*
-const chart = AugmentedRadarChart(data, options)
-chart.render()
- */
