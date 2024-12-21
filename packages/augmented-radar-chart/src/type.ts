@@ -10,9 +10,13 @@ export type AugmentedRadarChartData<
  */
 
 export type AugmentedRadarChartData = Record<
+  // name of the dimension
   string,
+  // data of the dimension
   Array<{
+    // x
     point: number;
+    // y
     value: number;
   }>
 >;
