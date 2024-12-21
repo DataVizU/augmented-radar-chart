@@ -1,4 +1,4 @@
-# Argument Radar Chart
+# Augmented Radar Chart
 
 - **Radar Chart** is suitable for displaying multi-dimensional data, but each dimension can only represent a single attribute.
 - **Horizon Chart** is suitable for showing distribution of single-dimensional data but is hard to handle multi-dimensional data.
