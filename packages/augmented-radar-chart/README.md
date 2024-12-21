@@ -1,62 +1,63 @@
 # Argument Radar Chart
 
-- 雷达图：适合展示多维度数据，但每个维度只能表示单一属性，难以同时展示数据分布情况。
-- 地平线图：适合展示单一维度数据的分布情况，但无法处理多维度数据。
+- **Radar Chart** is suitable for displaying multi-dimensional data, but each dimension can only represent a single attribute.
+- **Horizon Chart** is suitable for showing distribution of single-dimensional data but is hard to handle multi-dimensional data.
 
-增强雷达图结合了雷达图与地平线图的特点，能够在一个视图中同时展示多维度数据的单一属性和单一维度数据的分布情况。
-
+We propose **Augmented Radar Chart**, which combines the features of both radar charts and horizon charts, allowing simultaneous visualization the single attribute of multi-dimensional data and the distribution of each dimension.
 
 ## Pipeline
+> TODO: replace with image.
 ```swift
-调用最外层暴露的draw()函数，传入数据和样式 => {
-    创建一个ArgumentRadarChart对象 {
-        验证参数是否合法;
-        计算每个维度的平均值和分布;
+Call the exposed draw() function, passing in data and styles => {
+    Create an ArgumentRadarChart object {
+        Validate the parameters;
+        Calculate the average and distribution for each dimension;
     };
-    调用类的draw()方法渲染出增强雷达图
+    Call the class's draw() method to render the augmented radar chart
 }
 ```
 
 ---
-## 开发指南
+## Develop Guidelines
 
-安装项目所需的依赖：
+Install required dependencies：
 ```bash
 pnpm install
 ```
-TODO:
+> TODO: to be done.
 
-### 文件结构
+### Structure
 
 ```text
 augmented-radar-chart/
-├── dist/                     # 构建后的输出目录
-├── node_modules/             # 项目依赖
+├── dist/                     # Output directory for the build
+├── node_modules/             # Project dependencies
 ├── src/
-│   ├── calculation/          # 数据计算逻辑
-│   ├── rendering/            # 渲染逻辑
-│   ├── validation/           # 参数验证逻辑
-│   ├── chart.ts              # 雷达图类的实现
-│   ├── index.ts              # 导出主入口
-│   ├── type.ts               # 类型定义
+│   ├── calculation/          # Logic for data calculation
+│   ├── rendering/            # Logic for rendering chart 
+│   ├── validation/           # Logic for parameter validation
+│   ├── chart.ts              # Implementation of the radar chart class
+│   ├── index.ts              # Main entry point for the module
+│   ├── type.ts               # Type definitions
 
 ```
-`index.ts`是项目的主入口，其中只暴露了`draw()`函数，用户使用时会直接调用该函数，并传入数据和样式（数据和样式是画一张图所必须的），最终在指定的DOM element中渲染出一个增强雷达图
 
-`type.ts`定义了所有该项目使用到的数据类型，主要是两类：
-- `AugmentedRadarChartData`是增强雷达图需要的数据类型
-- `AugmentedRadarChartConfig`是增强雷达图需要的样式类型，其中包含了一些用户可以指定的配置项，具体见代码
+`index.ts`: The main entry point of the project. It solely exposes the `draw()` function, which users can call by passing in data and styles (both data and styles are necessary for rendering the chart). The chart is then rendered in the specified DOM element.
 
-`chart.ts`定义了抽象类`AugmentRaderChart`，并根据不同的渲染器(Canvas、SVG...)继承，所有继承AugmentRaderChart的类都需要实现一个`draw()`方法。使用抽象类主要是考虑可扩展性和复用验证和计算逻辑：验证和计算逻辑是可以共用的，但是不同的渲染方式的渲染逻辑难以完全共用
+`type.ts`: Defines all the types used in the project, primarily two as follows:
+- `AugmentedRadarChartData`: The data type required for the augmented radar chart.
+- `AugmentedRadarChartConfig`: The style configuration type for the augmented radar chart, which includes user-customizable options. 
 
-`validation/`、`calculation/`和`rendering/`目录分别是验证、计算和渲染的具体实现与测试代码。
+See the code for details.
 
-`validation/`下需要验证传入的数据和样式是否是合法的（考虑一些可能会导致出错的边界情况，例如size为负数，或者数据和样式不一致的维度名称...）
+`chart.ts`: Defines the abstract class `AugmentedRadarChart`. All classes that extend AugmentedRadarChart must implement `draw()` method. The use of an abstract class is intended to ensure extensibility and reuse of validation and calculation logic:
+Validation and calculation logic can be shared. Rendering logic, however, is difficult to share completely due to the differences in rendering methods.
 
-`calculation/`下需要计算每个维度的平均值和分布
+`validation/`, `calculation/`, and `rendering/`: These directories contain the specific implementations and test cases for validation, calculation, and rendering.
 
-`rendering/`下需要实现渲染雷达图部分和渲染地平线图部分的代码
+- `validation/`: Validates whether the provided data and styles are legal (e.g., checking for boundary conditions like negative sizes, or mismatched dimension names between data and styles).
 
-以上的内容在必要情况下可以修改调整
+- `calculation/`: Computes the average value and distribution for each dimension.
 
+- `rendering/`: Implements the rendering logic for the radar chart and the horizon chart.
 
