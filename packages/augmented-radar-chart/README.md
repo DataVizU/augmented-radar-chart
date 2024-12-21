@@ -11,7 +11,7 @@ We propose **Augmented Radar Chart**, which combines the features of both radar 
 
 ## Pipeline
 
-![pipeline](https://github.com/user-attachments/assets/c81830d3-0ebd-4ff8-a45a-f68954dbfbd8)
+![pipeline](https://github.com/user-attachments/assets/ba852715-6f8a-458e-a529-e18a292970a1)
 
 ---
 ## Develop Guidelines
