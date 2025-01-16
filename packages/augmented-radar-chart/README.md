@@ -18,8 +18,40 @@ arc.draw(data, config);
 
 ## Pipeline
 
-![pipeline](https://github.com/user-attachments/assets/ba852715-6f8a-458e-a529-e18a292970a1)
+```mermaid
+flowchart LR
 
+    subgraph Step1[Step 1: Instantiate]
+        A[data: ARCDATA] --> B{renderer ?}
+        C[config: ARCCONFIG] --> B
+    end
+
+    subgraph ARCSVG
+    end
+
+    subgraph Step2[Step 2: Render]
+        B --> ARCSVG
+        B --> ARCCanvas
+    end
+    
+    subgraph ARCCanvas
+        subgraph F[validation]
+            G[validateData] --> H[validateConfig]
+        end
+        subgraph I[calculation]
+            J[calculateAverage] --> K[calculateDistribution]
+        end
+        subgraph L[rendering]
+            M[renderRadarChart] --> N[renderHorizonChart]
+        end
+    end
+
+    style L fill:#D9D9D9
+    style I color:#000000,fill:#D9D9D9
+    style F fill:#D9D9D9
+    style Step2 fill:#FFFFFF,stroke-width:0px
+    style Step1 fill:#FFFFFF,stroke-width:0px
+```
 ---
 ## Develop Guidelines
 
