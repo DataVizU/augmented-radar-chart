@@ -3,24 +3,70 @@
 - **Radar Chart** is suitable for displaying multi-dimensional data, but each dimension can only represent a single attribute.
 - **Horizon Chart** is suitable for showing distribution of single-dimensional data but is hard to handle multi-dimensional data.
 
-We propose **Augmented Radar Chart**, which combines the features of both radar charts and horizon charts, allowing simultaneous visualization the single attribute of multi-dimensional data and the distribution of each dimension.
 
-> TODO: replace image
+We propose **Augmented Radar Chart**, which combines the features of both radar charts and horizon charts, allowing simultaneously visualize single attribute of multidimensional data and distribution of each dimension.
 
 ![overview](https://github.com/user-attachments/assets/344ecd79-3ec8-4af5-a013-f19fa270fd33)
 
+## Quick Start
+
+```typescript
+import augmented-radar-chart as arc;
+
+arc.draw(data, config);
+```
 ## Pipeline
 
-![pipeline](https://github.com/user-attachments/assets/ba852715-6f8a-458e-a529-e18a292970a1)
+```mermaid
+flowchart LR
+
+    subgraph Step1[Step 1: Instantiate]
+        A[data: ARCDATA] --> B{renderer ?}
+        C[config: ARCCONFIG] --> B
+    end
+
+    subgraph ARCSVG
+    end
+
+    subgraph Step2[Step 2: Render]
+        B --> ARCSVG
+        B --> ARCCanvas
+    end
+
+    subgraph ARCCanvas
+        subgraph F[validation]
+            G[validateData] --> H[validateConfig]
+        end
+        subgraph I[calculation]
+            J[calculateAverage] --> K[calculateDistribution]
+        end
+        subgraph L[rendering]
+            M[renderRadarChart] --> N[renderHorizonChart]
+        end
+    end
+
+    style L fill:#D9D9D9
+    style I color:#000000,fill:#D9D9D9
+    style F fill:#D9D9D9
+    style Step2 fill:#FFFFFF,stroke-width:0px
+    style Step1 fill:#FFFFFF,stroke-width:0px
+```
 
 ---
 ## Develop Guidelines
-
-Install required dependencies：
+- Run the following code in **root directory** to install required dependencies：
 ```bash
 pnpm install
 ```
-> TODO: to be done.
+- Start project in dev mode
+```bash
+pnpm dev:umd / pnpm dev:esm / pnpm dev:vite
+```
+- Run tests in `packages/augmented-radar-chart`
+```bash
+cd packages/augmented-radar-chart
+pnpm test
+```
 
 ### Structure
 
@@ -49,7 +95,7 @@ See the code for details.
 `chart.ts`: Defines the abstract class `AugmentedRadarChart`. All classes that extend AugmentedRadarChart must implement `draw()` method. The use of an abstract class is intended to ensure extensibility and reuse of validation and calculation logic:
 Validation and calculation logic can be shared. Rendering logic, however, is difficult to share completely due to the differences in rendering methods.
 
-`validation/`, `calculation/`, and `rendering/`: These directories contain the specific implementations and test cases for validation, calculation, and rendering.
+`validation/`, `calculation/`, and `rendering/`: contain specific implementations and test cases for validation, calculation, and rendering.
 
 - `validation/`: Validates whether the provided data and styles are legal (e.g., checking for boundary conditions like negative sizes, or mismatched dimension names between data and styles).
 
