@@ -6,22 +6,21 @@ describe('calculateAverage', () => {
   it('should calculate average values for multiple dimensions', () => {
     const testData: AugmentedRadarChartData = {
       MyGo: [
-        { point: 1, value: 10 },
-        { point: 2, value: 20 },
-        { point: 3, value: 30 },
+        { point: 20, value: 2 },
+        { point: 30, value: 2 },
       ],
       Morfonica: [
-        { point: 1, value: 40 },
-        { point: 2, value: 50 },
-        { point: 3, value: 60 },
+        { point: -10, value: 6 },
+        { point: 20, value: 3 },
+        { point: 30, value: 6 },
       ],
     };
 
     const result = calculateAverage(testData);
 
     expect(result).toEqual({
-      MyGo: 20, // (10 + 20 + 30) / 3
-      Morfonica: 50, // (40 + 50 + 60) / 3
+      MyGo: 25, // (20 * 2 + 30 * 2) / 4
+      Morfonica: 12,
     });
   });
 });
