@@ -1,22 +1,17 @@
 import { AugmentedRadarChartConfig, AugmentedRadarChartData } from './type';
-import { validateConfig, validateData } from './validation';
 import { calculateAverage, calculateDistribution } from './calculation';
+import { preprocess } from './preprocess';
 
 abstract class AugmentedRadarChart {
-  private data: AugmentedRadarChartData | undefined;
-  private config: AugmentedRadarChartConfig | undefined;
-  private average: Record<string, number> | undefined;
-  private distribution: AugmentedRadarChartData | undefined;
+  private data: AugmentedRadarChartData;
+  private config: AugmentedRadarChartConfig;
+  private average: Record<string, number>;
+  private distribution: AugmentedRadarChartData;
 
-  constructor(data: AugmentedRadarChartData, config: AugmentedRadarChartConfig) {
-    if (validateConfig(config) && validateData(data)) {
-      this.data = data;
-      this.config = config;
-      this.average = calculateAverage(data);
-      this.distribution = calculateDistribution(data, config.bins);
-    } else {
-      throw new Error(`Invalid data or config`);
-    }
+  constructor(data: Record<string, Array<number>>, config: Record<string, unknown>) {
+    ({ data: this.data, config: this.config } = preprocess(data, config));
+    this.average = calculateAverage(this.data);
+    this.distribution = calculateDistribution(this.data, this.config.bins);
   }
   public draw(): void {}
 }
