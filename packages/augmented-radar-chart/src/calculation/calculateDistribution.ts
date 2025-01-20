@@ -2,7 +2,7 @@ import { AugmentedRadarChartData } from '../type';
 
 export function calculateDistribution(
   data: AugmentedRadarChartData,
-  config: Record<string, { start: number; end: number }>,
+  config?: Record<string, { start: number; end: number }>,
 ): AugmentedRadarChartData {
   /**
    * @deprecated
