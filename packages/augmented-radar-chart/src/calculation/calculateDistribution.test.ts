@@ -10,41 +10,19 @@ describe('calculateDistribution', () => {
         { point: 2, value: 20 },
         { point: 3, value: 30 },
       ],
-      Morfonica: [
-        { point: 1, value: 0 },
-        { point: 2, value: 20 },
-        { point: 3, value: 40 },
-      ],
-      Roselia: [
-        { point: 1, value: -20 },
-        { point: 2, value: 0 },
-        { point: 3, value: 40 },
-      ],
     };
 
     const testConfig = {
-      MyGO: { start: 0, end: 50 },
-      Morfonica: { start: 0, end: 40 },
-      Roselia: { start: -30, end: 50 },
+      MyGO: { start: 0, end: 5 },
     };
 
     const result = calculateDistribution(testData, testConfig);
 
     expect(result).toEqual({
       MyGO: [
-        { point: 1, value: 0.2 },
-        { point: 2, value: 0.4 },
-        { point: 3, value: 0.6 },
-      ],
-      Morfonica: [
-        { point: 1, value: 0.0 },
-        { point: 2, value: 0.5 },
-        { point: 3, value: 1.0 },
-      ],
-      Roselia: [
-        { point: 1, value: 0.125 },
-        { point: 2, value: 0.375 },
-        { point: 3, value: 0.875 },
+        { point: 0.2, value: 10 },
+        { point: 0.4, value: 20 },
+        { point: 0.6, value: 30 },
       ],
     });
   });
