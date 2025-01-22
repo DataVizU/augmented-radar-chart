@@ -6,6 +6,8 @@ export function calculateAverage(data: AugmentedRadarChartData): Record<string, 
    * @param {AugmentedRadarChartData} data - data
    * @return {Record<string, number>} - averages of each dimension
    */
-  console.log({ data });
-  return {};
+  return Object.entries(data).reduce((averages, [dimension, points]) => ({
+    ...averages,
+    [dimension]: points.reduce((acc, d) => acc + d.point * d.value, 0) / points.reduce((acc, d) => acc + d.value, 0)
+  }), {});  
 }
