@@ -11,6 +11,17 @@ export function calculateDistribution(
    * @param {Record<string, { start: number; end: number }>} config
    * @return {AugmentedRadarChartData} - distribution of each dimension
    */
-  console.log({ data, config });
-  return {};
+  return Object.keys(data).reduce((acc, key) => {
+    const points = data[key];
+    const pointmin = Math.min(...points.map((p) => p.point));
+    const pointmax = Math.max(...points.map((p) => p.point));
+    const { start, end } = config?.[key] ?? { start: pointmin, end: pointmax };
+    return {
+      ...acc,
+      [key]: data[key].map(({ point, value }) => ({
+        point: (point - start) / (end - start),
+        value: value,
+      })),
+    };
+  }, {});
 }
