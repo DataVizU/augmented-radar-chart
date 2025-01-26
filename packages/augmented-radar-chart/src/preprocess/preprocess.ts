@@ -33,6 +33,10 @@ export function preprocess(
     }
   }
 
+  if (preprocessedConfig.container === null) {
+    throw new Error('Invalid container in chart configuration');
+  }
+
   if (preprocessedConfig.size <= 0) {
     throw new Error('Invalid size in chart configuration');
   }
