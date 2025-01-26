@@ -1,20 +1,15 @@
-import { AugmentedRadarChartConfig, AugmentedRadarChartData } from './type';
 import { AugmentedRadarChartCanvas, AugmentedRadarChartSVG } from './chart';
 
 export function draw(
-  data: AugmentedRadarChartData,
-  options: AugmentedRadarChartConfig,
+  data: Record<string, Array<number>>,
+  config: Record<string, unknown>,
   renderer: 'SVG' | 'Canvas',
 ): void {
   let chart;
   if (renderer === 'SVG') {
-    chart = new AugmentedRadarChartSVG(data, options);
+    chart = new AugmentedRadarChartSVG(data, config);
   } else {
-    chart = new AugmentedRadarChartCanvas(data, options);
+    chart = new AugmentedRadarChartCanvas(data, config);
   }
   chart.draw();
-}
-
-export function helloWorld(): void {
-  console.log('Hello zxy!');
 }
