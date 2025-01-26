@@ -1,6 +1,6 @@
 import { AugmentedRadarChartConfig, AugmentedRadarChartData } from '../type';
 import { defaultConfig } from '../constant';
-import { isColor } from '../utils';
+import chroma from 'chroma-js';
 
 export function preprocess(
   data: Record<string, Array<number>>,
@@ -15,7 +15,7 @@ export function preprocess(
 
   for (const dimension in data) {
     if (data[dimension].length === 0) {
-      throw new Error(`Empty data for dimension '${dimension}'.`);
+      throw new Error(`Empty data for dimension "${dimension}".`);
     }
     const pointMap: Record<number, number> = {};
     for (let i = 0; i < data[dimension].length; i++) {
@@ -33,9 +33,11 @@ export function preprocess(
     }
   }
 
+  /*
   if (preprocessedConfig.container === null) {
     throw new Error('Invalid container in chart configuration');
   }
+   */
 
   if (preprocessedConfig.size <= 0) {
     throw new Error('Invalid size in chart configuration');
@@ -59,18 +61,18 @@ export function preprocess(
   }
 
   if (typeof preprocessedConfig.styles.area.color === 'string') {
-    if (!isColor(preprocessedConfig.styles.area.color)) {
+    if (!chroma.valid(preprocessedConfig.styles.area.color)) {
       throw new Error(`Invalid area color in area configuration.`);
     }
   } else {
     for (const color of preprocessedConfig.styles.area.color as Array<string>) {
-      if (!isColor(color)) {
+      if (!chroma.valid(color)) {
         throw new Error(`Invalid area color in area configuration.`);
       }
     }
   }
 
-  if (!isColor(preprocessedConfig.styles.line.color)) {
+  if (!chroma.valid(preprocessedConfig.styles.line.color)) {
     throw new Error(`Invalid line color in line configuration.`);
   }
 
