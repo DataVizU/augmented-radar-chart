@@ -78,7 +78,7 @@ augmented-radar-chart/
 │   ├── calculation/          # Logic for data calculation
 │   ├── rendering/            # Logic for rendering chart 
 │   ├── validation/           # Logic for parameter validation
-│   ├── chart.ts              # Implementation of the radar chart class
+│   ├── charts/               # Implementation of the radar chart class
 │   ├── index.ts              # Main entry point for the module
 │   ├── type.ts               # Type definitions
 

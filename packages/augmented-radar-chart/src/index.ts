@@ -1,4 +1,4 @@
-import { AugmentedRadarChartCanvas, AugmentedRadarChartSVG } from './chart';
+import { AugmentedRadarChartCanvas, AugmentedRadarChartSVG } from './charts';
 
 export function draw(
   data: Record<string, Array<number>>,
