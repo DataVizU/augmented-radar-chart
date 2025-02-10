@@ -2,9 +2,15 @@ export type ARCData = Record<
   string,
   {
     data: Array<number>;
-    average?: number;
-    distribution?: Array<{ point: number; value: number }>;
     range?: { start: number; end: number };
+  }
+>;
+
+export type ARCDimension = Record<
+  string,
+  {
+    average: number;
+    distribution: Array<{ point: number; value: number }>;
   }
 >;
 

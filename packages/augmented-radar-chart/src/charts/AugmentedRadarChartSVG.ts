@@ -4,9 +4,9 @@ import chroma from 'chroma-js';
 
 export class AugmentedRadarChartSVG extends AugmentedRadarChart {
   public render(): void {
-    const data = this.data;
     const config = this.config;
     const style = this.style;
+    const dimension = this.dimension;
 
     const container = config.container;
     const containerSize = config.size;
@@ -19,7 +19,7 @@ export class AugmentedRadarChartSVG extends AugmentedRadarChart {
     const r = containerSize / 2;
 
     // 雷达图的维度数量以及每个维度的角度
-    const dimensionCount = Object.keys(data).length;
+    const dimensionCount = Object.keys(dimension).length;
     const angle = (2 * Math.PI) / dimensionCount;
 
     // 雷达图顶点的坐标集
@@ -33,15 +33,15 @@ export class AugmentedRadarChartSVG extends AugmentedRadarChart {
 
     const band_start = Math.min(
       style.y.start,
-      Object.values(data)
-        .flatMap((d) => d.distribution!)
+      Object.values(dimension)
+        .flatMap((d) => d.distribution)
         .reduce((min, curr) => (curr.value < min ? curr.value : min), Infinity),
     );
 
     const band_end = Math.max(
       style.y.end,
-      Object.values(data)
-        .flatMap((d) => d.distribution!)
+      Object.values(dimension)
+        .flatMap((d) => d.distribution)
         .reduce((max, curr) => (curr.value > max ? curr.value : max), -Infinity),
     );
 
@@ -69,7 +69,7 @@ export class AugmentedRadarChartSVG extends AugmentedRadarChart {
       .attr('height', containerSize);
 
     // 循环data的每一个维度
-    Object.entries(data).forEach((d, i) => {
+    Object.entries(dimension).forEach((d, i) => {
       const [key, value] = d;
 
       // 当前循环的角度
