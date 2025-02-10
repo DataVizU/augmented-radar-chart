@@ -1,15 +1,15 @@
-import { AugmentedRadarChartCanvas, AugmentedRadarChartSVG } from './chart';
+import { AugmentedRadarChartCanvas, AugmentedRadarChartSVG } from './charts';
+import { ARCConfig, ARCData } from './type';
 
-export function draw(
-  data: Record<string, Array<number>>,
-  config: Record<string, unknown>,
-  renderer: 'SVG' | 'Canvas',
-): void {
+export function draw(data: ARCData, config: ARCConfig, style?: Record<string, unknown>): void {
   let chart;
-  if (renderer === 'SVG') {
-    chart = new AugmentedRadarChartSVG(data, config);
+
+  const renderer = config.renderer;
+
+  if (renderer === 'svg') {
+    chart = new AugmentedRadarChartSVG(data, config, style);
   } else {
-    chart = new AugmentedRadarChartCanvas(data, config);
+    chart = new AugmentedRadarChartCanvas(data, config, style);
   }
-  chart.draw();
+  chart.render();
 }

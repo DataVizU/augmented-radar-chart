@@ -1,4 +1,4 @@
-import { calculateAverage } from './calculateAverage';
-import { calculateDistribution } from './calculateDistribution';
+import { calcAverage } from './calcAverage';
+import { calcDistribution } from './calcDistribution';
 
-export { calculateAverage, calculateDistribution };
+export { calcAverage, calcDistribution };

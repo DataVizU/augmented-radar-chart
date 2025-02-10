@@ -38,7 +38,7 @@ flowchart LR
             G[validateData] --> H[validateConfig]
         end
         subgraph I[calculation]
-            J[calculateAverage] --> K[calculateDistribution]
+            J[calculateAverage] --> K[calcDistribution]
         end
         subgraph L[rendering]
             M[renderRadarChart] --> N[renderHorizonChart]
@@ -78,7 +78,7 @@ augmented-radar-chart/
 │   ├── calculation/          # Logic for data calculation
 │   ├── rendering/            # Logic for rendering chart 
 │   ├── validation/           # Logic for parameter validation
-│   ├── chart.ts              # Implementation of the radar chart class
+│   ├── charts/               # Implementation of the radar chart class
 │   ├── index.ts              # Main entry point for the module
 │   ├── type.ts               # Type definitions
 

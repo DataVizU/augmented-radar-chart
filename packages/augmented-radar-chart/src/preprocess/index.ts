@@ -1,3 +1,5 @@
-import { preprocess } from './preprocess';
+import { preprocessData } from './preprocessData';
+import { preprocessConfig } from './preprocessConfig';
+import { preprocessStyle } from './preprocessStyle';
 
-export { preprocess };
+export { preprocessData, preprocessConfig, preprocessStyle };

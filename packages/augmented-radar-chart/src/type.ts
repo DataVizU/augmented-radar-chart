@@ -1,31 +1,32 @@
-export type AugmentedRadarChartData = Record<
-  // name of the dimension
+export type ARCData = Record<
   string,
-  // data of the dimension
-  Array<{
-    // x
-    point: number;
-    // y
-    value: number;
-  }>
+  {
+    data: Array<number>;
+    range?: { start: number; end: number };
+  }
 >;
 
-export interface AugmentedRadarChartConfig {
-  // DOM element to render the chart
-  container: HTMLElement | null;
-  // The size of the chart
-  size: number;
-  bins: Record<string, { start: number; end: number }>;
+export type ARCDimension = Record<
+  string,
+  {
+    average: number;
+    distribution: Array<{ point: number; value: number }>;
+  }
+>;
 
-  // Styling options for the radar chart
-  styles: {
-    area: {
-      band: number;
-      color: string | Array<string>;
-    };
-    line: {
-      color: string;
-      width: number;
-    };
-  };
+export interface ARCConfig {
+  container: HTMLElement | null;
+  renderer: string;
+  size: number;
+  band: number;
+}
+
+export interface ARCStyle {
+  x: { start: number; end: number };
+  y: { start: number; end: number };
+  border: Record<string, string | number | boolean | readonly (string | number)[]>;
+  band: Record<string, string | number | boolean | readonly (string | number)[]>;
+  area: Record<string, string | number | boolean | readonly (string | number)[]>;
+  label: Record<string, string | number | boolean | readonly (string | number)[]>;
+  line: Record<string, string | number | boolean | readonly (string | number)[]>;
 }
