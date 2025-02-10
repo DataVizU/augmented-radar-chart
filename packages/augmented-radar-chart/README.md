@@ -38,7 +38,7 @@ flowchart LR
             G[validateData] --> H[validateConfig]
         end
         subgraph I[calculation]
-            J[calculateAverage] --> K[calculateDistribution]
+            J[calculateAverage] --> K[calcDistribution]
         end
         subgraph L[rendering]
             M[renderRadarChart] --> N[renderHorizonChart]
