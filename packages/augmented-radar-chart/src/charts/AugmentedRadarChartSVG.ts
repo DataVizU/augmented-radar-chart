@@ -113,12 +113,12 @@ export class AugmentedRadarChartSVG extends AugmentedRadarChart {
         .text(key);
 
       // 添加平均值点的坐标
-      const ax = cx - r * Math.sin(alpha) * scaleX(value.average!);
-      const ay = cy - r * Math.cos(alpha) * scaleX(value.average!);
+      const ax = cx - r * Math.sin(alpha) * scaleX(value.average);
+      const ay = cy - r * Math.cos(alpha) * scaleX(value.average);
       averages.push([ax, ay]);
 
       // 循环每个维度的distribution的每个元素
-      value.distribution!.forEach((d) => {
+      value.distribution.forEach((d) => {
         // 画数据点，可以理解为先在对应的x值处先画一条与y轴平行的线，起始点表示y=0，终止点表示y=1
         // 每一层都是单位1，并且每一层的起始点和终止点的坐标都是相同的
         // 然后再在这条线段上取百分之多少的位置，把数据点画在那个位置
