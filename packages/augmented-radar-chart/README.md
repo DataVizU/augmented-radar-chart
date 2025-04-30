@@ -80,19 +80,19 @@ augmented-radar-chart/
 │   ├── validation/           # Logic for parameter validation
 │   ├── charts/               # Implementation of the radar chart class
 │   ├── index.ts              # Main entry point for the module
-│   ├── type.ts               # Type definitions
+│   ├── types.ts               # Type definitions
 
 ```
 
 `index.ts`: The main entry point of the project. It solely exposes the `draw()` function, which users can call by passing in data and styles (both data and styles are necessary for rendering the chart). The chart is then rendered in the specified DOM element.
 
-`type.ts`: Defines all the types used in the project, primarily two as follows:
+`types.ts`: Defines all the types used in the project, primarily two as follows:
 - `AugmentedRadarChartData`: The data type required for the augmented radar chart.
 - `AugmentedRadarChartConfig`: The style configuration type for the augmented radar chart, which includes user-customizable options. 
 
 See the code for details.
 
-`chart.ts`: Defines the abstract class `AugmentedRadarChart`. All classes that extend AugmentedRadarChart must implement `draw()` method. The use of an abstract class is intended to ensure extensibility and reuse of validation and calculation logic:
+`chart.ts`: Defines the abstract class `AugmentedRadarChartSVG`. All classes that extend AugmentedRadarChartSVG must implement `draw()` method. The use of an abstract class is intended to ensure extensibility and reuse of validation and calculation logic:
 Validation and calculation logic can be shared. Rendering logic, however, is difficult to share completely due to the differences in rendering methods.
 
 `validation/`, `calculation/`, and `rendering/`: contain specific implementations and test cases for validation, calculation, and rendering.

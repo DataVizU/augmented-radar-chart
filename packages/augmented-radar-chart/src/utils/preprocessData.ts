@@ -1,5 +1,5 @@
-import { ARCData, ARCDimension } from '../type';
-import { validateRange } from './validation';
+import { ARCData, ARCDimension } from '../types';
+import { validateRange } from './validateRange';
 import { calcAverage, calcDistribution } from '../calculation';
 
 export function preprocessData(data: ARCData): ARCDimension {
@@ -9,7 +9,7 @@ export function preprocessData(data: ARCData): ARCDimension {
     const max = Math.max(...value.data);
     const min = Math.min(...value.data);
     if (value.range === undefined) {
-      value.range = { start: max, end: min };
+      value.range = { start: min, end: max };
     } else {
       validateRange(value.range, max, min);
     }
