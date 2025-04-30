@@ -1,10 +1,6 @@
-import { ARCConfig } from '../type';
+import { ARCConfig } from '../types';
 
 export function preprocessConfig(config: ARCConfig) {
-  if (config.container === null) {
-    throw new Error();
-  }
-
   if (config.size <= 0) {
     throw new Error();
   }

@@ -15,8 +15,6 @@ export type ARCDimension = Record<
 >;
 
 export interface ARCConfig {
-  container: HTMLElement | null;
-  renderer: string;
   size: number;
   band: number;
 }
