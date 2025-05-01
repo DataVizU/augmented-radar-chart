@@ -54,13 +54,13 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       throw new Error('Failed to get 2D context');
     }
 
-    // 调整 Canvas 尺寸以匹配设备像素比
+    // Adjust the Canvas size to match the pixel ratio of the device
     const dpr = window.devicePixelRatio || 1;
     canvas.width = size * dpr;
     canvas.height = size * dpr;
-    canvas.style.width = `${size}px`; // 设置 CSS 尺寸
+    canvas.style.width = `${size}px`; // set the CSS size
     canvas.style.height = `${size}px`;
-    context.scale(dpr, dpr); // 缩放上下文以匹配 DPR
+    context.scale(dpr, dpr); // Scale the context to match the DPR
 
     const pathData: {
       [key: string]: { [layer: number]: Array<{ x: number; y: number; point: number }> };
@@ -143,6 +143,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     context.translate(translateX, translateY);
     context.scale(scale, scale);
 
+    // Render each band layer with gradient colors
     Object.entries(pathData).forEach(([, layers]) => {
       Object.entries(layers).forEach(([layerStr, points]) => {
         const layer = parseInt(layerStr);
