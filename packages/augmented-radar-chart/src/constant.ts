@@ -1,8 +1,9 @@
 import { ARCStyle } from './types';
 
 export const DEFAULT_STYLE: ARCStyle = {
-  x: { start: 0.05, end: 0.95 },
-  y: { start: 0, end: 1 },
+  x: { from: 0.05, to: 0.95 },
+  y: { from: 0, to: 2 },
+  offset: 0.05,
   border: {
     fill: '#aaaaaa',
   },
@@ -12,6 +13,7 @@ export const DEFAULT_STYLE: ARCStyle = {
   label: {
     fill: '#000000',
     'font-size': 24,
+    // 'font size': 24,
   },
   area: {
     fill: '#ffffff00',
@@ -20,5 +22,6 @@ export const DEFAULT_STYLE: ARCStyle = {
   line: {
     stroke: '#000000',
     fill: '#ffffff',
+    strokeWidth: 16,
   },
 };

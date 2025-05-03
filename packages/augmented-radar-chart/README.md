@@ -23,27 +23,27 @@ flowchart LR
     subgraph Step1[Step 1: Instantiate]
         A[data: ARCDATA] --> B{renderer ?}
         C[config: ARCCONFIG] --> B
-    end
+    to
 
     subgraph ARCSVG
-    end
+    to
 
     subgraph Step2[Step 2: Render]
         B --> ARCSVG
         B --> ARCCanvas
-    end
+    to
 
     subgraph ARCCanvas
         subgraph F[validation]
             G[validateData] --> H[validateConfig]
-        end
+        to
         subgraph I[calculation]
             J[calculateAverage] --> K[calcDistribution]
-        end
+        to
         subgraph L[rendering]
             M[renderRadarChart] --> N[renderHorizonChart]
-        end
-    end
+        to
+    to
 
     style L fill:#D9D9D9
     style I color:#000000,fill:#D9D9D9

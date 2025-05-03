@@ -1,3 +1,6 @@
+/**
+ * @description **Apply styles to canvas**
+ */
 export const applyStyle = (ctx: CanvasRenderingContext2D, styleObj: any) => {
   Object.entries(styleObj).forEach(([key, value]) => {
     if (key === 'fill' && typeof value === 'string') {

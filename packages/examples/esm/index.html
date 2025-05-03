@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Radar Chart - ESM Example</title>
 </head>
 <body>
-    <h1>ESM Example</h1>
-    <div id="chart"></div>
-    <script type="module">
-        import { helloWorld } from './node_modules/augmented-radar-chart/dist/index.js';
-        helloWorld();
-    </script>
+<script type="module" src="../vite/main.ts"></script>
+<div style="display: flex; align-items: center; justify-content: center; column-gap: 40px"></div>
+<div style="display: flex; align-items: center; justify-content: center; column-gap: 40px">
+    <span>Renderer: SVG</span>
+    |
+    <span>Renderer: Canvas</span>
+</div>
 </body>
-</html> 
+</html>

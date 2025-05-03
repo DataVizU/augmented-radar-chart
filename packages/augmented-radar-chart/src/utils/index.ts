@@ -1,7 +1,7 @@
-import { preprocessData } from './preprocessData';
-import { preprocessConfig } from './preprocessConfig';
-import { preprocessStyle } from './preprocessStyle';
+import { refineData } from './refineData';
+import { refineConfig } from './refineConfig';
+import { refineStyle } from './refineStyle';
 import { validateRange } from './validateRange';
-import { applyStyle } from "./applyStyle";
+import { applyStyle } from './applyStyle';
 
-export { preprocessData, preprocessConfig, preprocessStyle, validateRange, applyStyle };
+export { refineData, refineConfig, refineStyle, validateRange, applyStyle };

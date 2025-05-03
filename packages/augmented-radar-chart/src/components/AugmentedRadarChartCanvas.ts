@@ -1,26 +1,34 @@
-import * as d3 from 'd3';
-import chroma from 'chroma-js';
 import { ARCConfig, ARCStyle, ARCDimension } from '../types';
 import { AugmentedRadarChartBase } from './AugmentedRadarChartBase';
 import { applyStyle } from '../utils';
 
 export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
   protected renderChartImpl(config: ARCConfig, style: ARCStyle, dimension: ARCDimension): void {
-    const { size, band } = config;
-    const cx = size / 2;
-    const cy = size / 2;
-    const r = size / 2;
+    const { cx, cy, vertices, averages, labels, pathData, colors } = this.calculateChartGeometry(
+      config,
+      style,
+      dimension,
+    );
 
-    const dimensionCount = Object.keys(dimension).length;
-    const angle = (2 * Math.PI) / dimensionCount;
-    const vertices: Array<[number, number]> = [];
-    const averages: Array<[number, number]> = [];
+    // 创建 Canvas 并设置尺寸
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error('Failed to get 2D context');
+    }
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = config.size * dpr;
+    canvas.height = config.size * dpr;
+    canvas.style.width = `${config.size}px`;
+    canvas.style.height = `${config.size}px`;
+    context.scale(dpr, dpr);
 
-    // Bounding box to track min/max coordinates
+    // 计算边界框
     let minX = Infinity,
       minY = Infinity,
       maxX = -Infinity,
       maxY = -Infinity;
+
     const updateBounds = (x: number, y: number) => {
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
@@ -28,127 +36,59 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       maxY = Math.max(maxY, y);
     };
 
-    const scaleX = d3.scaleLinear().domain([0, 1]).range([style.x.start, style.x.end]);
-    const band_start = Math.min(
-      style.y.start,
-      Object.values(dimension)
-        .flatMap((d) => d.distribution)
-        .reduce((min, curr) => (curr.value < min ? curr.value : min), Infinity),
-    );
-    const band_end = Math.max(
-      style.y.end,
-      Object.values(dimension)
-        .flatMap((d) => d.distribution)
-        .reduce((max, curr) => (curr.value > max ? curr.value : max), -Infinity),
-    );
-    const scaleY = d3.scaleLinear().domain([band_start, band_end]).nice().range([0, band]);
+    // 辅助函数：设置字体并返回字体大小
+    const setFont = () => {
+      const fontSize =
+        typeof style.label?.['font-size'] === 'number' ? style.label['font-size'] : 16;
+      const fontFamily = style.label?.['font-family'] || 'Arial';
+      context.font = `${fontSize}px ${fontFamily}`;
+      return fontSize;
+    };
 
-    const colors = chroma
-      .scale([chroma(style.band.fill as string).alpha(0), chroma(style.band.fill as string)])
-      .mode('lab')
-      .colors(band + 1);
-
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    if (!context) {
-      throw new Error('Failed to get 2D context');
-    }
-
-    // Adjust the Canvas size to match the pixel ratio of the device
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
-    canvas.style.width = `${size}px`; // set the CSS size
-    canvas.style.height = `${size}px`;
-    context.scale(dpr, dpr); // Scale the context to match the DPR
-
-    const pathData: {
-      [key: string]: { [layer: number]: Array<{ x: number; y: number; point: number }> };
-    } = {};
-
-    // Step 1: Calculate vertices, averages, labels, and path points
-    Object.entries(dimension).forEach(([key, value], i) => {
-      const alpha = angle * i;
-      const beta = angle * (i + 1);
-
-      const vx = cx - r * Math.sin(alpha);
-      const vy = cy - r * Math.cos(alpha);
-      vertices.push([vx, vy]);
-      updateBounds(vx, vy);
-
-      const tx = cx - r * Math.sin(alpha) * 1.05;
-      const ty = cy - r * Math.cos(alpha) * 1.05;
-      updateBounds(tx, ty);
-
-      // Measure text for bounds
+    // 收集边界框数据
+    vertices.forEach(([x, y]) => updateBounds(x, y));
+    averages.forEach(([x, y]) => updateBounds(x, y));
+    labels.forEach(({ x, y, text, anchor }) => {
+      updateBounds(x, y);
       context.save();
       applyStyle(context, style.label);
-      context.font = `${style.label?.['font-size'] || '16px'} ${style.label?.['font-family'] || 'Arial'}`;
-      const textMetrics = context.measureText(key);
+      const fontSize = setFont();
+      const textMetrics = context.measureText(text);
       const textWidth = textMetrics.width;
-      const textHeight = Number(style.label?.['font-size'] || 16);
-      const textAnchor = tx.toFixed() === cx.toFixed() ? 'middle' : tx > cx ? 'start' : 'end';
-      if (textAnchor === 'start') {
-        updateBounds(tx, ty - textHeight / 2);
-        updateBounds(tx + textWidth, ty + textHeight / 2);
-      } else if (textAnchor === 'end') {
-        updateBounds(tx - textWidth, ty - textHeight / 2);
-        updateBounds(tx, ty + textHeight / 2);
+      const textHeight = fontSize;
+      if (anchor === 'start') {
+        updateBounds(x, y - textHeight / 2);
+        updateBounds(x + textWidth, y + textHeight / 2);
+      } else if (anchor === 'end') {
+        updateBounds(x - textWidth, y - textHeight / 2);
+        updateBounds(x, y + textHeight / 2);
       } else {
-        updateBounds(tx - textWidth / 2, ty - textHeight / 2);
-        updateBounds(tx + textWidth / 2, ty + textHeight / 2);
+        updateBounds(x - textWidth / 2, y - textHeight / 2);
+        updateBounds(x + textWidth / 2, y + textHeight / 2);
       }
       context.restore();
-
-      const ax = cx - r * Math.sin(alpha) * scaleX(value.average);
-      const ay = cy - r * Math.cos(alpha) * scaleX(value.average);
-      averages.push([ax, ay]);
-      updateBounds(ax, ay);
-
-      value.distribution.forEach((d) => {
-        const sx = cx - r * Math.sin(alpha) * scaleX(d.point);
-        const sy = cy - r * Math.cos(alpha) * scaleX(d.point);
-        const ex = cx - r * Math.sin(beta) * scaleX(d.point);
-        const ey = cy - r * Math.cos(beta) * scaleX(d.point);
-        const px = d3.scaleLinear().domain([0, 1]).range([sx, ex])(scaleY(d.value) % 1);
-        const py = d3.scaleLinear().domain([0, 1]).range([sy, ey])(scaleY(d.value) % 1);
-        const layer = Math.trunc(scaleY(d.value));
-
-        updateBounds(sx, sy);
-        updateBounds(ex, ey);
-        updateBounds(px, py);
-
-        for (let i = 0; i < band; i++) {
-          const x = i > layer ? sx : i < layer ? ex : px;
-          const y = i > layer ? sy : i < layer ? ey : py;
-
-          if (!pathData[key]) pathData[key] = {};
-          if (!pathData[key][i]) {
-            pathData[key][i] = [];
-            pathData[key][i].push({ x: cx, y: cy, point: -Infinity });
-          }
-          pathData[key][i].push({ x, y, point: scaleX(d.point) });
-          pathData[key][i].push({ x: vx, y: vy, point: Infinity });
-        }
+    });
+    Object.values(pathData).forEach((layers) => {
+      Object.values(layers).forEach((points) => {
+        points.forEach(({ x, y }) => updateBounds(x, y));
       });
     });
 
+    // 应用缩放和平移
     const bboxWidth = maxX - minX;
     const bboxHeight = maxY - minY;
-    const scale = Math.min(size / bboxWidth, size / bboxHeight) * 0.95;
-    const translateX = (size - bboxWidth * scale) / 2 - minX * scale;
-    const translateY = (size - bboxHeight * scale) / 2 - minY * scale;
-
+    const scale = Math.min(config.size / bboxWidth, config.size / bboxHeight) * 0.95;
+    const translateX = (config.size - bboxWidth * scale) / 2 - minX * scale;
+    const translateY = (config.size - bboxHeight * scale) / 2 - minY * scale;
     context.save();
     context.translate(translateX, translateY);
     context.scale(scale, scale);
 
-    // Render each band layer with gradient colors
+    // 渲染路径（分布数据）
     Object.entries(pathData).forEach(([, layers]) => {
       Object.entries(layers).forEach(([layerStr, points]) => {
         const layer = parseInt(layerStr);
         const sortedPoints = points.sort((a, b) => a.point - b.point);
-
         context.save();
         context.fillStyle = colors[layer + 1];
         context.beginPath();
@@ -162,6 +102,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       });
     });
 
+    // 渲染顶点多边形
     context.save();
     context.beginPath();
     vertices.forEach(([x, y], index) => {
@@ -173,6 +114,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     context.stroke();
     context.restore();
 
+    // 渲染平均值点
     averages.forEach(([x, y]) => {
       context.save();
       context.beginPath();
@@ -182,6 +124,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       context.restore();
     });
 
+    // 渲染平均值连线
     context.save();
     context.beginPath();
     averages.forEach(([x, y], index) => {
@@ -193,6 +136,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     context.stroke();
     context.restore();
 
+    // 渲染轴线
     vertices.forEach(([vx, vy]) => {
       context.save();
       context.beginPath();
@@ -203,24 +147,20 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       context.restore();
     });
 
-    Object.entries(dimension).forEach(([key], i) => {
-      const alpha = angle * i;
-      const tx = cx - r * Math.sin(alpha) * 1.05;
-      const ty = cy - r * Math.cos(alpha) * 1.05;
-      const textAnchor = tx.toFixed() === cx.toFixed() ? 'center' : tx > cx ? 'start' : 'end';
-
+    // 渲染标签
+    labels.forEach(({ x, y, text, anchor }) => {
       context.save();
       applyStyle(context, style.label);
-      context.font = `${style.label?.['font-size'] || '16px'} ${style.label?.['font-family'] || 'Arial'}`;
-      context.textAlign = textAnchor as CanvasTextAlign;
+      setFont();
+      context.textAlign = (anchor === 'middle' ? 'center' : anchor) as CanvasTextAlign;
       context.textBaseline = 'middle';
-      context.fillText(key, tx, ty);
+      context.fillText(text, x, y);
       context.restore();
     });
 
-    context.restore(); // Restore the context to remove scaling
+    context.restore(); // 恢复上下文
 
-    // Append canvas to container
+    // 将 Canvas 添加到容器
     this._container!.appendChild(canvas);
   }
 }

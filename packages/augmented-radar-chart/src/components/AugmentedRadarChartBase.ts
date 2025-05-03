@@ -1,7 +1,8 @@
 import { ARCConfig, ARCData, ARCDimension, ARCStyle } from '../types';
-import { preprocessConfig, preprocessStyle, preprocessData } from '../utils';
+import { refineConfig, refineStyle, refineData } from '../utils';
 import { DEFAULT_STYLE } from '../constant';
 import * as d3 from 'd3';
+import chroma from 'chroma-js';
 
 export abstract class AugmentedRadarChartBase extends HTMLElement {
   protected _data: ARCData | null;
@@ -29,11 +30,11 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
       try {
         if (name === 'data') {
           this._data = JSON.parse(newValue) as ARCData;
-          this._dimension = preprocessData(this._data);
+          this._dimension = refineData(this._data);
         } else if (name === 'config') {
-          this._config = preprocessConfig(JSON.parse(newValue) as ARCConfig);
+          this._config = refineConfig(JSON.parse(newValue) as ARCConfig);
         } else if (name === 'chart-style') {
-          this._chartStyle = preprocessStyle(JSON.parse(newValue) as Partial<ARCStyle>);
+          this._chartStyle = refineStyle(JSON.parse(newValue) as Partial<ARCStyle>);
         }
         this.renderChart();
       } catch (error) {
@@ -68,7 +69,9 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
       return;
     }
 
-    this.destroy(); // 清理之前的渲染内容
+    // Clean previous instance
+    this.destroy();
+
     const config = { ...this._config, container: this._container };
     try {
       this.renderChartImpl(config, this._chartStyle, this._dimension);
@@ -77,14 +80,109 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
     }
   }
 
-  // 抽象方法，子类必须实现具体渲染逻辑
+  protected calculateChartGeometry(config: ARCConfig, style: ARCStyle, dimension: ARCDimension) {
+    const { size, band } = config;
+
+    // Center point of the chart
+    const cx = size / 2;
+    const cy = size / 2;
+
+    const r = size / 2;
+
+    const dimensionCount = Object.keys(dimension).length;
+    const angle = (2 * Math.PI) / dimensionCount;
+
+    // Coordinates for vertices
+    const vertices: Array<[number, number]> = [];
+    const averages: Array<[number, number]> = [];
+    const labels: Array<{ x: number; y: number; text: string; anchor: string }> = [];
+    const pathData: {
+      [key: string]: { [layer: number]: Array<{ x: number; y: number; point: number }> };
+    } = {};
+
+    const y_from = Math.min(
+      style.y.from,
+      Object.values(dimension)
+        .flatMap((d) => d.distribution)
+        .reduce((min, curr) => (curr.value < min ? curr.value : min), Infinity),
+    );
+    const y_to = Math.max(
+      style.y.to,
+      Object.values(dimension)
+        .flatMap((d) => d.distribution)
+        .reduce((max, curr) => (curr.value > max ? curr.value : max), -Infinity),
+    );
+
+    const scaleX = d3.scaleLinear().domain([0, 1]).range([style.x.from, style.x.to]);
+    const scaleY = d3.scaleLinear().domain([y_from, y_to]).nice().range([0, band]);
+
+    const colors = chroma
+      .scale([chroma(style.band.fill as string).alpha(0), chroma(style.band.fill as string)])
+      .mode('lab')
+      .colors(band + 1);
+
+    Object.entries(dimension).forEach(([key, value], i) => {
+      const alpha = angle * i;
+      const beta = angle * (i + 1);
+
+      // Vertices
+      const vx = cx - r * Math.sin(alpha);
+      const vy = cy - r * Math.cos(alpha);
+      vertices.push([vx, vy]);
+
+      // Labels
+      const tx = cx - r * Math.sin(alpha) * 1.05;
+      const ty = cy - r * Math.cos(alpha) * 1.05;
+      const textAnchor = tx.toFixed() === cx.toFixed() ? 'middle' : tx > cx ? 'start' : 'end';
+      labels.push({ x: tx, y: ty, text: key, anchor: textAnchor });
+
+      // Averages
+      const ax = cx - r * Math.sin(alpha) * scaleX(value.average);
+      const ay = cy - r * Math.cos(alpha) * scaleX(value.average);
+      averages.push([ax, ay]);
+
+      // Path points
+      pathData[key] = {};
+      value.distribution.forEach((d) => {
+        const sx = cx - r * Math.sin(alpha) * scaleX(d.point);
+        const sy = cy - r * Math.cos(alpha) * scaleX(d.point);
+        const ex = cx - r * Math.sin(beta) * scaleX(d.point);
+        const ey = cy - r * Math.cos(beta) * scaleX(d.point);
+        const px = d3.scaleLinear().domain([0, 1]).range([sx, ex])(scaleY(d.value) % 1);
+        const py = d3.scaleLinear().domain([0, 1]).range([sy, ey])(scaleY(d.value) % 1);
+        const layer = Math.trunc(scaleY(d.value));
+
+        for (let i = 0; i < band; i++) {
+          const x = i > layer ? sx : i < layer ? ex : px;
+          const y = i > layer ? sy : i < layer ? ey : py;
+
+          if (!pathData[key][i]) {
+            pathData[key][i] = [];
+            pathData[key][i].push({
+              x: cx - r * Math.sin(alpha) * style.offset,
+              y: cy - r * Math.cos(alpha) * style.offset,
+              point: -Infinity,
+            });
+          }
+          pathData[key][i].push({ x, y, point: scaleX(d.point) });
+          pathData[key][i].push({
+            x: vx + r * Math.sin(alpha) * style.offset,
+            y: vy + r * Math.cos(alpha) * style.offset,
+            point: Infinity,
+          });
+        }
+      });
+    });
+
+    return { cx, cy, r, vertices, averages, labels, pathData, scaleX, scaleY, colors };
+  }
+
   protected abstract renderChartImpl(
     config: ARCConfig,
     style: ARCStyle,
     dimension: ARCDimension,
   ): void;
 
-  // 抽象方法，子类实现具体的清理逻辑
   protected destroy() {
     if (this._container) {
       d3.select(this._container).select('svg').remove();
@@ -94,7 +192,7 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
 
   set data(value: ARCData | null) {
     this._data = value;
-    this._dimension = value ? preprocessData(value) : {};
+    this._dimension = value ? refineData(value) : {};
     this.renderChart();
   }
 
@@ -103,7 +201,7 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
   }
 
   set config(value: Partial<ARCConfig>) {
-    this._config = preprocessConfig({ ...this._config, ...value });
+    this._config = refineConfig({ ...this._config, ...value });
     this.renderChart();
   }
 
@@ -112,7 +210,7 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
   }
 
   set chartStyle(value: Partial<ARCStyle>) {
-    this._chartStyle = preprocessStyle(value);
+    this._chartStyle = refineStyle(value);
     this.renderChart();
   }
 
