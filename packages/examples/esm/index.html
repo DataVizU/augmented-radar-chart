@@ -6,12 +6,67 @@
     <title>Radar Chart - ESM Example</title>
 </head>
 <body>
-<script type="module" src="../vite/main.ts"></script>
-<div style="display: flex; align-items: center; justify-content: center; column-gap: 40px"></div>
-<div style="display: flex; align-items: center; justify-content: center; column-gap: 40px">
+<div
+  id="charts"
+  style="display: flex; align-items: center; justify-content: center; column-gap: 40px"
+>
+    <augmented-radar-chart-svg></augmented-radar-chart-svg>
+    <augmented-radar-chart-canvas></augmented-radar-chart-canvas>
+</div>
+<div
+  style="display: flex; align-items: center; justify-content: center; column-gap: 40px"
+>
     <span>Renderer: SVG</span>
     |
     <span>Renderer: Canvas</span>
 </div>
+
+<script type="module">
+    import { AugmentedRadarChartSVG, AugmentedRadarChartCanvas } from './node_modules/augmented-radar-chart/dist/index.js';
+    
+    customElements.define('augmented-radar-chart-svg', AugmentedRadarChartSVG);
+    customElements.define('augmented-radar-chart-canvas', AugmentedRadarChartCanvas);
+    
+    const svg = document.querySelector('augmented-radar-chart-svg');
+    const canvas = document.querySelector('augmented-radar-chart-canvas');
+    
+    async function fetchData() {
+        const response = await fetch('https://uapis.cn/api/sjsz?count=20');
+        const { numbers } = await response.json();
+        return numbers.map(x => Math.trunc(Math.log(x + 1)));
+    }
+    
+    const config = {
+        size: 600,
+        band: 2,
+    };
+    
+    try {
+        const [softwareEngineerData, productManagerData, hrSpecialistData, dataScientistData, marketingCoordinatorData] = await Promise.all([
+            fetchData(),
+            fetchData(),
+            fetchData(),
+            fetchData(),
+            fetchData(),
+        ]);
+        
+        const data = {
+            'Software Engineer': { data: softwareEngineerData },
+            'Product Manager': { data: productManagerData },
+            'HR Specialist': { data: hrSpecialistData },
+            'Data Scientist': { data: dataScientistData },
+            'Marketing Coordinator': { data: marketingCoordinatorData },
+        };
+        
+        if (svg && canvas) {
+            svg.data = data;
+            svg.config = config;
+            canvas.data = data;
+            canvas.config = config;
+        }
+    } catch (error) {
+        console.error('Failed to fetch data:', error);
+    }
+</script>
 </body>
 </html>

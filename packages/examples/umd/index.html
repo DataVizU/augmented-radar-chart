@@ -3,15 +3,69 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Radar Chart - UMD Example</title>
+    <title>Radar Chart - UMD/IIFE Example</title>
+    <script src="./node_modules/augmented-radar-chart/dist/index.global.js"></script>
 </head>
 <body>
-<script type="module" src="main.ts"></script>
-<div style="display: flex; align-items: center; justify-content: center; column-gap: 40px"></div>
-<div style="display: flex; align-items: center; justify-content: center; column-gap: 40px">
+<div
+  id="charts"
+  style="display: flex; align-items: center; justify-content: center; column-gap: 40px"
+>
+    <augmented-radar-chart-svg></augmented-radar-chart-svg>
+    <augmented-radar-chart-canvas></augmented-radar-chart-canvas>
+</div>
+<div
+  style="display: flex; align-items: center; justify-content: center; column-gap: 40px"
+>
     <span>Renderer: SVG</span>
     |
     <span>Renderer: Canvas</span>
 </div>
+
+<script>
+    const { AugmentedRadarChartSVG, AugmentedRadarChartCanvas } = window.AugmentedRadarChart;
+    
+    customElements.define('augmented-radar-chart-svg', AugmentedRadarChartSVG);
+    customElements.define('augmented-radar-chart-canvas', AugmentedRadarChartCanvas);
+    
+    const svg = document.querySelector('augmented-radar-chart-svg');
+    const canvas = document.querySelector('augmented-radar-chart-canvas');
+    
+    function fetchData() {
+        return fetch('https://uapis.cn/api/sjsz?count=20')
+          .then(response => response.json())
+          .then(({ numbers }) => numbers.map(x => Math.trunc(Math.log(x + 1))));
+    }
+    
+    const config = {
+        size: 600,
+        band: 2,
+    };
+    
+    Promise.all([
+        fetchData(), // Software Engineer
+        fetchData(), // Product Manager
+        fetchData(), // HR Specialist
+        fetchData(), // Data Scientist
+        fetchData(), // Marketing Coordinator
+    ]).then(([softwareEngineerData, productManagerData, hrSpecialistData, dataScientistData, marketingCoordinatorData]) => {
+        const data = {
+            'Software Engineer': { data: softwareEngineerData },
+            'Product Manager': { data: productManagerData },
+            'HR Specialist': { data: hrSpecialistData },
+            'Data Scientist': { data: dataScientistData },
+            'Marketing Coordinator': { data: marketingCoordinatorData },
+        };
+        
+        if (svg && canvas) {
+            svg.data = data;
+            svg.config = config;
+            canvas.data = data;
+            canvas.config = config;
+        }
+    }).catch(error => {
+        console.error('Failed to fetch data:', error);
+    });
+</script>
 </body>
 </html>

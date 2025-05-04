@@ -1,17 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Radar Chart - Vite Example</title>
-  </head>
-  <body>
-    <script type="module" src="main.ts"></script>
-    <div style="display: flex; align-items: center; justify-content: center; column-gap: 40px"></div>
-    <div style="display: flex; align-items: center; justify-content: center; column-gap: 40px">
-      <span>Renderer: SVG</span>
-      |
-      <span>Renderer: Canvas</span>
-    </div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radar Chart - Vite Example</title>
+</head>
+<body>
+<div
+  id="charts"
+  style="display: flex; align-items: center; justify-content: center; column-gap: 40px"
+>
+  <augmented-radar-chart-svg></augmented-radar-chart-svg>
+  <augmented-radar-chart-canvas></augmented-radar-chart-canvas>
+</div>
+<div
+  style="display: flex; align-items: center; justify-content: center; column-gap: 40px"
+>
+  <span>Renderer: SVG</span>
+  |
+  <span>Renderer: Canvas</span>
+</div>
+
+<script type="module">
+  import { AugmentedRadarChartSVG, AugmentedRadarChartCanvas } from 'augmented-radar-chart';
+  
+  customElements.define('augmented-radar-chart-svg', AugmentedRadarChartSVG);
+  customElements.define('augmented-radar-chart-canvas', AugmentedRadarChartCanvas);
+  
+  const svg = document.querySelector('augmented-radar-chart-svg');
+  const canvas = document.querySelector('augmented-radar-chart-canvas');
+  
+  function fetchData() {
+    const response = fetch('https://uapis.cn/api/sjsz?count=20');
+    const { numbers } = response.json();
+    return numbers.map((x) => Math.trunc(Math.log(x + 1)));
+  }
+  
+  const data = {
+    'Software Engineer': { data: fetchData() },
+    'Product Manager': { data: fetchData() },
+    'HR Specialist': { data: fetchData() },
+    'Data Scientist': { data: fetchData() },
+    'Marketing Coordinator': { data: fetchData() },
+  };
+
+  const config = {
+    size: 600,
+    band: 2,
+  };
+  
+  if (svg && canvas) {
+    svg.data = data;
+    svg.config = config;
+    canvas.data = data;
+    canvas.config = config;
+  }
+</script>
+</body>
 </html>

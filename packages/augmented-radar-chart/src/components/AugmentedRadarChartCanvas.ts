@@ -10,11 +10,10 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       dimension,
     );
 
-    // 创建 Canvas 并设置尺寸
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     if (!context) {
-      throw new Error('Failed to get 2D context');
+      throw new Error();
     }
     const dpr = window.devicePixelRatio || 1;
     canvas.width = config.size * dpr;
@@ -23,7 +22,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     canvas.style.height = `${config.size}px`;
     context.scale(dpr, dpr);
 
-    // 计算边界框
+    // calc bound
     let minX = Infinity,
       minY = Infinity,
       maxX = -Infinity,
@@ -36,7 +35,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       maxY = Math.max(maxY, y);
     };
 
-    // 辅助函数：设置字体并返回字体大小
+    // set font style
     const setFont = () => {
       const fontSize =
         typeof style.label?.['font-size'] === 'number' ? style.label['font-size'] : 16;
@@ -45,7 +44,6 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       return fontSize;
     };
 
-    // 收集边界框数据
     vertices.forEach(([x, y]) => updateBounds(x, y));
     averages.forEach(([x, y]) => updateBounds(x, y));
     labels.forEach(({ x, y, text, anchor }) => {
@@ -74,7 +72,6 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       });
     });
 
-    // 应用缩放和平移
     const bboxWidth = maxX - minX;
     const bboxHeight = maxY - minY;
     const scale = Math.min(config.size / bboxWidth, config.size / bboxHeight) * 0.95;
@@ -84,7 +81,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     context.translate(translateX, translateY);
     context.scale(scale, scale);
 
-    // 渲染路径（分布数据）
+    // render paths
     Object.entries(pathData).forEach(([, layers]) => {
       Object.entries(layers).forEach(([layerStr, points]) => {
         const layer = parseInt(layerStr);
@@ -102,7 +99,6 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       });
     });
 
-    // 渲染顶点多边形
     context.save();
     context.beginPath();
     vertices.forEach(([x, y], index) => {
@@ -114,7 +110,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     context.stroke();
     context.restore();
 
-    // 渲染平均值点
+    // render average point
     averages.forEach(([x, y]) => {
       context.save();
       context.beginPath();
@@ -124,7 +120,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       context.restore();
     });
 
-    // 渲染平均值连线
+    // render average line
     context.save();
     context.beginPath();
     averages.forEach(([x, y], index) => {
@@ -136,7 +132,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     context.stroke();
     context.restore();
 
-    // 渲染轴线
+    // render axis
     vertices.forEach(([vx, vy]) => {
       context.save();
       context.beginPath();
@@ -147,7 +143,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       context.restore();
     });
 
-    // 渲染标签
+    // render label
     labels.forEach(({ x, y, text, anchor }) => {
       context.save();
       applyStyle(context, style.label);
@@ -158,9 +154,8 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
       context.restore();
     });
 
-    context.restore(); // 恢复上下文
+    context.restore();
 
-    // 将 Canvas 添加到容器
     this._container!.appendChild(canvas);
   }
 }
