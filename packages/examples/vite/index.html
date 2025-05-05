@@ -29,32 +29,42 @@
   
   const svg = document.querySelector('augmented-radar-chart-svg');
   const canvas = document.querySelector('augmented-radar-chart-canvas');
-  
-  function fetchData() {
-    const response = fetch('https://uapis.cn/api/sjsz?count=20');
-    const { numbers } = response.json();
-    return numbers.map((x) => Math.trunc(Math.log(x + 1)));
+
+  async function fetchData() {
+    const response = await fetch('https://uapis.cn/api/sjsz?count=20');
+    const { numbers } = await response.json();
+    return numbers.map(x => Math.trunc(Math.log(x + 1)));
   }
-  
-  const data = {
-    'Software Engineer': { data: fetchData() },
-    'Product Manager': { data: fetchData() },
-    'HR Specialist': { data: fetchData() },
-    'Data Scientist': { data: fetchData() },
-    'Marketing Coordinator': { data: fetchData() },
-  };
 
   const config = {
     size: 600,
     band: 2,
   };
-  
-  if (svg && canvas) {
-    svg.data = data;
-    svg.config = config;
-    canvas.data = data;
-    canvas.config = config;
-  }
+
+  Promise.all([
+    fetchData(), // Software Engineer
+    fetchData(), // Product Manager
+    fetchData(), // HR Specialist
+    fetchData(), // Data Scientist
+    fetchData(), // Marketing Coordinator
+  ]).then(([softwareEngineerData, productManagerData, hrSpecialistData, dataScientistData, marketingCoordinatorData]) => {
+    const data = {
+      'Software Engineer': { data: softwareEngineerData },
+      'Product Manager': { data: productManagerData },
+      'HR Specialist': { data: hrSpecialistData },
+      'Data Scientist': { data: dataScientistData },
+      'Marketing Coordinator': { data: marketingCoordinatorData },
+    };
+
+    if (svg && canvas) {
+      svg.data = data;
+      svg.config = config;
+      canvas.data = data;
+      canvas.config = config;
+    }
+  }).catch(error => {
+    console.error('Failed to fetch data:', error);
+  });
 </script>
 </body>
 </html>
