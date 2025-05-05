@@ -27,19 +27,15 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue !== newValue && newValue !== null) {
-      try {
-        if (name === 'data') {
-          this._data = JSON.parse(newValue) as ARCData;
-          this._dimension = refineData(this._data);
-        } else if (name === 'config') {
-          this._config = refineConfig(JSON.parse(newValue) as ARCConfig);
-        } else if (name === 'chart-style') {
-          this._chartStyle = refineStyle(JSON.parse(newValue) as Partial<ARCStyle>);
-        }
-        this.renderChart();
-      } catch (error) {
-        console.error(`Error parsing ${name}:`, error);
+      if (name === 'data') {
+        this._data = JSON.parse(newValue) as ARCData;
+        this._dimension = refineData(this._data);
+      } else if (name === 'config') {
+        this._config = refineConfig(JSON.parse(newValue) as ARCConfig);
+      } else if (name === 'chart-style') {
+        this._chartStyle = refineStyle(JSON.parse(newValue) as Partial<ARCStyle>);
       }
+      this.renderChart();
     }
   }
 
@@ -73,17 +69,12 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
     this.destroy();
 
     const config = { ...this._config, container: this._container };
-    try {
-      this.renderChartImpl(config, this._chartStyle, this._dimension);
-    } catch (error) {
-      console.error(`Error rendering chart:`, error);
-    }
+    this.renderChartImpl(config, this._chartStyle, this._dimension);
   }
 
-  protected calculateChartGeometry(config: ARCConfig, style: ARCStyle, dimension: ARCDimension) {
+  protected calculateGeometry(config: ARCConfig, style: ARCStyle, dimension: ARCDimension) {
     const { size, band } = config;
 
-    // Center point of the chart
     const cx = size / 2;
     const cy = size / 2;
 
@@ -92,7 +83,6 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
     const dimensionCount = Object.keys(dimension).length;
     const angle = (2 * Math.PI) / dimensionCount;
 
-    // Coordinates for vertices
     const vertices: Array<[number, number]> = [];
     const averages: Array<[number, number]> = [];
     const labels: Array<{ x: number; y: number; text: string; anchor: string }> = [];
@@ -117,31 +107,29 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
     const scaleY = d3.scaleLinear().domain([y_from, y_to]).nice().range([0, band]);
 
     const colors = chroma
-      .scale([chroma(style.band.fill as string).alpha(0), chroma(style.band.fill as string)])
+      .scale([chroma(style.chart.fill as string).alpha(0), chroma(style.chart.fill as string)])
       .mode('lab')
       .colors(band + 1);
+
+    console.log(colors);
 
     Object.entries(dimension).forEach(([key, value], i) => {
       const alpha = angle * i;
       const beta = angle * (i + 1);
 
-      // Vertices
       const vx = cx - r * Math.sin(alpha);
       const vy = cy - r * Math.cos(alpha);
       vertices.push([vx, vy]);
 
-      // Labels
       const tx = cx - r * Math.sin(alpha) * 1.05;
       const ty = cy - r * Math.cos(alpha) * 1.05;
       const textAnchor = tx.toFixed() === cx.toFixed() ? 'middle' : tx > cx ? 'start' : 'end';
       labels.push({ x: tx, y: ty, text: key, anchor: textAnchor });
 
-      // Averages
       const ax = cx - r * Math.sin(alpha) * scaleX(value.average);
       const ay = cy - r * Math.cos(alpha) * scaleX(value.average);
       averages.push([ax, ay]);
 
-      // Path points
       pathData[key] = {};
       value.distribution.forEach((d) => {
         const sx = cx - r * Math.sin(alpha) * scaleX(d.point);
@@ -183,12 +171,7 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
     dimension: ARCDimension,
   ): void;
 
-  protected destroy() {
-    if (this._container) {
-      d3.select(this._container).select('svg').remove();
-      d3.select(this._container).select('canvas').remove();
-    }
-  }
+  protected abstract destroy(): void;
 
   set data(value: ARCData | null) {
     this._data = value;
