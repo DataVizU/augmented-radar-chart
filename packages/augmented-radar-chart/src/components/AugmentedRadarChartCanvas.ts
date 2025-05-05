@@ -27,7 +27,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     context.scale(scale, scale);
 
     this.renderPaths(context, pathData, colors);
-    this.renderAxis(context, config, style, vertices, cx, cy);
+    this.renderAxis(context, style, vertices, cx, cy);
     this.renderAveragePoints(context, style, averages);
     this.renderAverageLine(context, style, averages);
     this.renderLabels(context, style, labels);
@@ -41,18 +41,29 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
   } {
-    const canvas = document.createElement('canvas');
+    // 检查容器中是否已有 Canvas
+    let canvas = this._container!.querySelector('canvas') as HTMLCanvasElement;
+
+    // 如果没有 Canvas，则新建
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+    }
+
     const context = canvas.getContext('2d');
     if (!context) {
       throw new ReferenceError('Context identifier is not supported');
     }
 
+    // 设置 Canvas 尺寸，考虑设备像素比
     const dpr = window.devicePixelRatio || 1;
     canvas.width = config.size * dpr;
     canvas.height = config.size * dpr;
     canvas.style.width = `${config.size}px`;
     canvas.style.height = `${config.size}px`;
     context.scale(dpr, dpr);
+
+    // 清空 Canvas 内容以准备新绘制
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
     return { canvas, context };
   }
