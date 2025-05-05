@@ -121,8 +121,8 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
       const vy = cy - r * Math.cos(alpha);
       vertices.push([vx, vy]);
 
-      const tx = cx - r * Math.sin(alpha) * 1.05;
-      const ty = cy - r * Math.cos(alpha) * 1.05;
+      const tx = cx - r * Math.sin(alpha) * (1 + <number>style.label.offset);
+      const ty = cy - r * Math.cos(alpha) * (1 + <number>style.label.offset);
       const textAnchor = tx.toFixed() === cx.toFixed() ? 'middle' : tx > cx ? 'start' : 'end';
       labels.push({ x: tx, y: ty, text: key, anchor: textAnchor });
 
