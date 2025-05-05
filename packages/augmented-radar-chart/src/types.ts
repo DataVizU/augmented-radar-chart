@@ -14,14 +14,11 @@ export type ARCDimension = Record<
   }
 >;
 
-// required
 export interface ARCConfig {
   size: number;
-  // number of bands
   band: number;
 }
 
-// optional
 export interface ARCStyle {
   // range of x-value, [0, 1]
   x: { from: number; to: number };
