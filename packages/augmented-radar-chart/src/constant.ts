@@ -4,24 +4,19 @@ export const DEFAULT_STYLE: ARCStyle = {
   x: { from: 0.05, to: 0.95 },
   y: { from: 0, to: 2 },
   offset: 0.05,
-  border: {
-    fill: '#aaaaaa',
-  },
-  band: {
-    fill: '#80008049',
+  background: {
+    stroke: '#aaaaaa',
+    fill: '#ffffff',
   },
   label: {
     fill: '#000000',
+    offset: 0.05,
     'font-size': 24,
-    // 'font size': 24,
   },
-  area: {
-    fill: '#ffffff00',
-    stroke: '#aaaaaa',
+  chart: {
+    fill: '#80008049',
   },
   line: {
     stroke: '#000000',
-    fill: '#ffffff',
-    strokeWidth: 16,
   },
 };

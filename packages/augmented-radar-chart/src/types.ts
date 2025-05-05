@@ -26,9 +26,8 @@ export interface ARCStyle {
   y: { from: number; to: number };
   // both ends' offset of the horizon chart, relative to its container
   offset: number;
-  border: Record<string, string | number | boolean | readonly (string | number)[]>;
-  band: Record<string, string | number | boolean | readonly (string | number)[]>;
-  area: Record<string, string | number | boolean | readonly (string | number)[]>;
+  background: Record<string, string | number | boolean | readonly (string | number)[]>;
+  chart: Record<string, string | number | boolean | readonly (string | number)[]>;
   label: Record<string, string | number | boolean | readonly (string | number)[]>;
   line: Record<string, string | number | boolean | readonly (string | number)[]>;
 }
