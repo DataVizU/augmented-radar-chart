@@ -75,4 +75,8 @@ src/
 └── index.ts           # Public API entry
 ```
 
+### TODO
 
+- [ ] Responsive design
+- [ ] Add legend for chart
+- [ ] More style support for canvas renderer
