@@ -1,6 +1,3 @@
-/**
- * @description **Calculate the normalized distribution [range.from, range.to] of a list of numbers**
- */
 export function calculateDistribution(data: Array<number>, range: { from: number; to: number }) {
   return Array.from(
     data.reduce((map, value) => {
