@@ -6,7 +6,8 @@
 
 We propose **Augmented Radar Chart**, which combines the features of both radar charts and horizon charts, allowing simultaneously visualize single attribute of multidimensional data and distribution of each dimension.
 
-![overview](https://github.com/user-attachments/assets/344ecd79-3ec8-4af5-a013-f19fa270fd33)
+![overview](https://github.com/user-attachments/assets/7c44ea99-6d77-4d91-80a9-95e1657639ad)
+
 
 ## Usage
 
