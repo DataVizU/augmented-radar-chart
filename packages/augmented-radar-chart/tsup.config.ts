@@ -10,4 +10,6 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   treeshake: true,
+  bundle: true,
+  target: 'es2019',
 });
