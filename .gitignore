@@ -10,4 +10,11 @@ yarn-error.log*
 
 .vscode/*
 
-dist/*
+packages/examples/esm/node_modules
+packages/examples/umd/node_modules
+packages/examples/vite/node_modules
+packages/examples/esm/dist
+packages/examples/umd/dist
+packages/examples/vite/dist
+packages/augmented-radar-chart/node_modules
+packages/augmented-radar-chart/dist
