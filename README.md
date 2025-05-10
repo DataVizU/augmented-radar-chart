@@ -7,6 +7,15 @@ We propose **Augmented Radar Chart**, which combines the features of both radar 
 
 ![overview](https://github.com/user-attachments/assets/7c44ea99-6d77-4d91-80a9-95e1657639ad)
 
+## Install package
+
+```bash
+npm install @datavizu/augmented-radar-chart
+# pnpm
+pnpm add @datavizu/augmented-radar-chart
+# yarn
+yarn add @datavizu/augmented-radar-chart
+```
 
 ## Usage
 
