@@ -1,5 +1,5 @@
 {
-  "name": "augmented-radar-chart",
+  "name": "@datavizu/augmented-radar-chart",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
