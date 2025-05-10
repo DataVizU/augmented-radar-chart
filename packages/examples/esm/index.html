@@ -23,13 +23,13 @@
 
 <script type="module">
     import { AugmentedRadarChartSVG, AugmentedRadarChartCanvas } from './node_modules/augmented-radar-chart/dist/index.js';
-    
+
     customElements.define('augmented-radar-chart-svg', AugmentedRadarChartSVG);
     customElements.define('augmented-radar-chart-canvas', AugmentedRadarChartCanvas);
-    
+
     const svg = document.querySelector('augmented-radar-chart-svg');
     const canvas = document.querySelector('augmented-radar-chart-canvas');
-    
+
     const softwareEngineerData = [
         7, 2, 9, 4, 6, 1, 8, 3, 5, 0,
         10, 4, 2, 7, 9, 3, 6, 1, 8, 5,
@@ -65,9 +65,9 @@
         7, 8, 8, 8, 8, 9, 9, 9, 9, 10,
         10, 10, 10, 10, 10, 10, 10, 10, 10, 10
     ];
-    
+
     const config = { size: 600, band: 8 };
-    
+
     const data = {
         'Software Engineer': { data: softwareEngineerData },
         'Product Manager': { data: productManagerData },
@@ -75,7 +75,7 @@
         'Data Scientist': { data: dataScientistData },
         'Marketing Coordinator': { data: marketingCoordinatorData },
     };
-    
+
     if (svg && canvas) {
         svg.data = data;
         svg.config = config;
