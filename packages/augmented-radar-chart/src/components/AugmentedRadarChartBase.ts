@@ -41,8 +41,8 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
 
   connectedCallback(): void {
     const container = document.createElement('div');
-    container.style.width = `${this._config.size}px`;
-    container.style.height = `${this._config.size}px`;
+    container.style.width = `100%`;
+    container.style.height = `100%`;
     this.shadowRoot!.appendChild(container);
     this._container = container;
     this.renderChart();
@@ -55,8 +55,8 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
   protected renderChart(): void {
     if (!this._container) {
       const container = document.createElement('div');
-      container.style.width = `${this._config.size}px`;
-      container.style.height = `${this._config.size}px`;
+      container.style.width = `100%`;
+      container.style.height = `100%`;
       this.shadowRoot!.appendChild(container);
       this._container = container;
     }
@@ -65,7 +65,6 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
       return;
     }
 
-    // Clean previous instance
     this.destroy();
 
     const config = { ...this._config, container: this._container };
@@ -110,8 +109,6 @@ export abstract class AugmentedRadarChartBase extends HTMLElement {
       .scale([chroma(style.chart.fill as string).alpha(0), chroma(style.chart.fill as string)])
       .mode('lab')
       .colors(band + 1);
-
-    console.log(colors);
 
     Object.entries(dimension).forEach(([key, value], i) => {
       const alpha = angle * i;

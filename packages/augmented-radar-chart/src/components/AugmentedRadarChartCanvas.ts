@@ -51,7 +51,7 @@ export class AugmentedRadarChartCanvas extends AugmentedRadarChartBase {
 
     const context = canvas.getContext('2d');
     if (!context) {
-      throw new ReferenceError('Context identifier is not supported');
+      throw ReferenceError('RENDER_ERROR: Context identifier is not supported');
     }
 
     // 设置 Canvas 尺寸，考虑设备像素比
