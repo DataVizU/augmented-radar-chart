@@ -2,7 +2,7 @@
   "name": "example-esm",
   "private": true,
   "dependencies": {
-    "augmented-radar-chart": "workspace:*"
+    "@datavizu/augmented-radar-chart": "workspace:*"
   },
   "devDependencies": {
     "serve": "^14.2.4"

@@ -1,3 +1,3 @@
-export function helloWorld(): void {
-  console.log('Hello World!');
-}
+import { AugmentedRadarChartSVG } from './components/AugmentedRadarChartSVG';
+import { AugmentedRadarChartCanvas } from './components/AugmentedRadarChartCanvas';
+export { AugmentedRadarChartSVG, AugmentedRadarChartCanvas };

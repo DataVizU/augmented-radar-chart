@@ -1,7 +1,7 @@
 /tmp
 /out-tsc
 
-/node_modules
+node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -9,3 +9,12 @@ yarn-error.log*
 .pnp.js
 
 .vscode/*
+
+packages/examples/esm/node_modules
+packages/examples/umd/node_modules
+packages/examples/vite/node_modules
+packages/examples/esm/dist
+packages/examples/umd/dist
+packages/examples/vite/dist
+packages/augmented-radar-chart/node_modules
+packages/augmented-radar-chart/dist
