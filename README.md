@@ -28,7 +28,20 @@ chart.config = {
 };
 </script>
 ```
-**For develop guidance**: refer to `packages/augmented-radar-chart/README.md`
+
+## Develop Guidelines
+- Run the following code in **root directory** to install required dependencies：
+```bash
+pnpm install
+```
+- Start development servers
+```bash
+pnpm dev:umd    # UMD build
+pnpm dev:esm    # ES Module build 
+pnpm dev:vite   # Vite playground
+```
+
+> **For develop guidance**: refer to `packages/augmented-radar-chart/README.md`
 
 ## TODO
 

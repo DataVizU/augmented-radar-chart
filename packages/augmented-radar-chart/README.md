@@ -1,5 +1,26 @@
 # Augmented Radar Chart
 
+## Usage
+
+```html
+<augmented-radar-chart-svg id="chart"></augmented-radar-chart-svg>
+
+<script type="module">
+import { AugmentedRadarChartSVG } from 'augmented-radar-chart';
+customElements.define('augmented-radar-chart-svg', AugmentedRadarChartSVG);
+
+const chart = document.getElementById('chart');
+chart.data = {
+  'Dimension 1': { data: [25, 30, 28] },
+  'Dimension 2': { data: [15, 20, 18] }
+};
+chart.config = {
+  size: 600,
+  band: 2
+};
+</script>
+```
+
 ## Pipeline
 
 ```mermaid
@@ -17,19 +38,6 @@ flowchart TD
     
     style E fill:#f9d5e5,stroke:#333
     style F fill:#d5e8d4,stroke:#333
-```
-
----
-## Develop Guidelines
-- Run the following code in **root directory** to install required dependencies：
-```bash
-pnpm install
-```
-- Start development servers
-```bash
-pnpm dev:umd    # UMD build
-pnpm dev:esm    # ES Module build 
-pnpm dev:vite   # Vite playground
 ```
 
 ### Structure
