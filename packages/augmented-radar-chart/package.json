@@ -1,6 +1,24 @@
 {
   "name": "@datavizu/augmented-radar-chart",
   "version": "1.0.0",
+  "description": "Augmented Radar Chart combines the features of both radar charts and horizon charts, allowing simultaneously visualize single attribute of multidimensional data and distribution of each dimension.",
+  "author": "datavizu",
+  "license": "MIT",
+  "homepage": "https://github.com/DataVizU/augmented-radar-chart",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DataVizU/augmented-radar-chart"
+  },
+  "keywords": [
+    "augmented-radar-chart",
+    "radar-chart",
+    "horizon-chart",
+    "data-visualization",
+    "data-chart"
+  ],
+  "bugs": {
+    "url": "https://github.com/DataVizU/augmented-radar-chart/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

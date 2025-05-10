@@ -1,7 +1,6 @@
 {
   "name": "augmented-radar-chart-global",
   "version": "1.0.0",
-  "description": "",
   "scripts": {
     "build": "pnpm -r build",
     "build:core": "pnpm --filter augmented-radar-chart build",
