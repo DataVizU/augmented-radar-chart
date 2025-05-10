@@ -63,9 +63,12 @@ importers:
 
   packages/examples/esm:
     dependencies:
-      augmented-radar-chart:
+      '@datavizu/augmented-radar-chart':
         specifier: workspace:*
         version: link:../../augmented-radar-chart
+      d3:
+        specifier: ^7.9.0
+        version: 7.9.0
     devDependencies:
       serve:
         specifier: ^14.2.4
@@ -73,7 +76,7 @@ importers:
 
   packages/examples/umd:
     dependencies:
-      augmented-radar-chart:
+      '@datavizu/augmented-radar-chart':
         specifier: workspace:*
         version: link:../../augmented-radar-chart
     devDependencies:
@@ -83,7 +86,7 @@ importers:
 
   packages/examples/vite:
     dependencies:
-      augmented-radar-chart:
+      '@datavizu/augmented-radar-chart':
         specifier: workspace:*
         version: link:../../augmented-radar-chart
     devDependencies:

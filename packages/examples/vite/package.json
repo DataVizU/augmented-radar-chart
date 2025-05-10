@@ -2,7 +2,7 @@
   "name": "example-vite",
   "private": true,
   "dependencies": {
-    "augmented-radar-chart": "workspace:*"
+    "@datavizu/augmented-radar-chart": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.6.3",
